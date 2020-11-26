@@ -1,0 +1,15 @@
+{
+  "CookieSecret": "cookieSecret",
+  "WeworkConfig": {
+    "WeworkCropID": "xxxxxxxxxxxxxxxxxx",
+    "WeworkAgentID": "xxxxxxx",
+    "WeworkSecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "HydraConfig": {
+    "HydraHost": "127.0.0.1",
+    "HydraMethod": "http",
+    "HydraAdminPort": "4445",
+    "HydraClientID": "auth-code-client",
+    "HydraClientSecret": "secret"
+  }
+}
