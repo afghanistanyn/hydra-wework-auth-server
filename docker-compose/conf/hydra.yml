@@ -1,0 +1,30 @@
+serve:
+  cookies:
+    same_site_mode: Lax
+
+urls:
+  self:
+    issuer: http://hydra:4444
+  consent: http://hydra-wework.internet.com/wework/consent
+  login: http://hydra-wework.internet.com/wework/auth
+  logout: http://hydra-wework.internet.com/wework/logout
+  error: http://hydra-wework.internet.com/error
+
+# hydra-wework.internet.com改为你拥有的外部域名，在内网的话需要类似ngrok/frp之类的工具进行内网穿透
+# 此域名需要加入企业微信自建应用的回调域名
+
+
+secrets:
+  system:
+    - youReallyNeedToChangeThis
+
+oidc:
+  subject_identifiers:
+    enabled:
+      - pairwise
+      - public
+    pairwise:
+      salt: youReallyNeedToChangeThis
+
+log:
+  leak_sensitive_values: true

@@ -8,8 +8,30 @@
 
 - 使用方法
 ```
+cd docker-compose
+docker-compose up -d
+
+docker-compose  exec hydra \
+    hydra clients create \
+    --endpoint http://127.0.0.1:4445 \
+    --id auth-code-client \
+    --secret secret \
+    --grant-types authorization_code,refresh_token,client_credentials \
+    --response-types code,id_token,token \
+    --scope openid,offline \
+    --callbacks http://127.0.0.1:5556/callback
 
 
+docker-compose exec hydra \
+    hydra token user \
+    --client-id auth-code-client \
+    --client-secret secret \
+    --endpoint http://127.0.0.1:4444/ \
+    --port 5556 \
+    --scope openid,offline,snsapi_base 
+
+
+# http://127.0.0.1:5556 
 ```
 
 

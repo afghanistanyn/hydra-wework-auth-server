@@ -5,7 +5,7 @@
     "WeworkSecret": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
   },
   "HydraConfig": {
-    "HydraHost": "127.0.0.1",
+    "HydraHost": "hydra",
     "HydraMethod": "http",
     "HydraAdminPort": "4445",
     "HydraClientID": "auth-code-client",

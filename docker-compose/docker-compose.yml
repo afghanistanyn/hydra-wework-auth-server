@@ -1,0 +1,71 @@
+version: '3.7'
+
+services:
+  hydra:
+    image: oryd/hydra:v1.9.0-alpha.2
+    ports:
+      - "4444:4444" # Public port
+      - "4445:4445" # Admin port
+    command:
+      serve -c /etc/config/hydra/hydra.yml all --dangerous-force-http
+    volumes:
+      - ./conf:/etc/config/hydra
+    environment:
+      - DSN=mysql://root:secret@tcp(mysqld:3306)/hydra?max_conns=20&max_idle_conns=4
+      - TRACING_PROVIDER=jaeger
+      - TRACING_PROVIDERS_JAEGER_SAMPLING_SERVER_URL=http://jaeger:5778/sampling
+      - TRACING_PROVIDERS_JAEGER_LOCAL_AGENT_ADDRESS=jaeger:6831
+      - TRACING_PROVIDERS_JAEGER_SAMPLING_TYPE=const
+      - TRACING_PROVIDERS_JAEGER_SAMPLING_VALUE=1
+    restart: unless-stopped
+    depends_on:
+      - hydra-migrate
+      - jaeger
+    networks:
+      - intranet
+
+  hydra-migrate:
+    image: oryd/hydra:v1.9.0-alpha.2
+    environment:
+      - DSN=mysql://root:secret@tcp(mysqld:3306)/hydra?max_conns=20&max_idle_conns=4
+    command:
+      migrate -c /etc/config/hydra/hydra.yml sql -e --yes
+    volumes:
+      - ./conf:/etc/config/hydra
+    restart: on-failure
+    networks:
+      - intranet
+
+  mysqld:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    volumes:
+      - ./sql:/docker-entrypoint-initdb.d/
+    networks:
+      - intranet
+
+  jaeger:
+    image: jaegertracing/all-in-one:1.19.2
+    ports:
+      - "16686:16686" # The UI port
+    networks:
+      - intranet
+
+  hydra-wework-auth-server:
+    image: afghanistanyn/hydra-wework-auth-server:v1.0.0
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./logs:/hydra-wework/logs/
+      - ./conf/config.json:/hydra-wework/conf/config.json
+    network:
+      - intranet
+
+
+
+networks:
+  intranet:
+
